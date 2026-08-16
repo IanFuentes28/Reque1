@@ -19,12 +19,20 @@ import com.example.reque1.connection.ConnectivityObserver
 import com.example.reque1.ui.components.ConnectionStatus
 import com.example.reque1.ui.components.SaveButton
 import com.example.reque1.ui.components.TemperatureInputField
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import com.example.reque1.gps.LocationProvider
+import com.example.reque1.ui.components.RegisterLecturaButton
+
 
 @Composable
 fun TemperatureScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current //accede al context de android
     //crea el connectivity observer, el remember hace que se reutilice en lugar de crear nuevos
     val connectivityObserver = remember { ConnectivityObserver(context) }
+    //crea el location provider
+    val locationProvider = remember { LocationProvider(context) }
+
 
     //mutableStateOf presta atención a los valores cambiantes
     //rememberSaveable restaura el estado luego de cambios, optimiza
@@ -32,7 +40,20 @@ fun TemperatureScreen(modifier: Modifier = Modifier) {
     var isConnected by rememberSaveable { mutableStateOf(false) }
     var temperature by rememberSaveable { mutableStateOf("") }
 
-    //threat
+
+    //permisos
+    var hasLocationPermission by remember {
+        mutableStateOf(locationProvider.hasLocationPermission()) }
+
+
+    val permissionLauncher = rememberLauncherForActivityResult( //recibe resultados, emite un flow
+        contract = ActivityResultContracts.RequestPermission() //pide un solo permiso
+    ) { granted ->
+        hasLocationPermission = granted //reacciona a la autorización o negación del usuario, recibe la respuesta
+    }
+
+
+    //threats
     LaunchedEffect(Unit) { //emite un coroutine, unit hace que solo se haga una vez
         connectivityObserver.observe().collect { connected ->// collect activa el flow del connectivityObserver
             isConnected = connected
@@ -57,10 +78,20 @@ fun TemperatureScreen(modifier: Modifier = Modifier) {
                 //la validación de cambios están en el componente
             )
             SaveButton(
-                onClick = { /* usa el valor de `temperature` aquí */ },
+                onClick = { /*temperature*/ },
                 enabled = temperature.isNotBlank() //tiene que tener algo para guardar
+            )
+            RegisterLecturaButton( //crea el boton de lectura
+                hasLocationPermission = hasLocationPermission, //pasa el permiso
+                onRequestPermission = {
+                    permissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION) //para pedir permiso
+                },
+                onRegister = {
+                    //coroutine
+                }
             )
         } //cierre de cosas que ocupan wifi
         //más cosas sin wifi
+
     }
 }
