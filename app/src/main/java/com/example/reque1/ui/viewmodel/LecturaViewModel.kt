@@ -27,30 +27,30 @@ class LecturaViewModel(application: Application) : AndroidViewModel(application)
     val isConnected: StateFlow<Boolean> = connectivityObserver.observe()
         .stateIn(//convierte de flow a stateflow
             scope = viewModelScope,//para matar cualquier corutina si el viewmodel muere
-            started = SharingStarted.WhileSubscribed(5000), //espera 5 segundos antes de detener elflow
+            started = SharingStarted.WhileSubscribed(5000), //espera 5 segundos antes de detener el flow
             initialValue = false //valor inicial del flow, previo a la primera emision
         )
 
     //emite un unico flow, todos trabajan con el mismo flow
     val lecturas: StateFlow<List<LecturaEntity>> = lecturaDao.obtenerTodas()
         .stateIn( //convierte de flow a stateflow
-            scope = viewModelScope, //para matar cualquier corutina si el viewmodel muere
+            scope = viewModelScope, //para matar cualquier corutine si el viewmodel muere
             started = SharingStarted.WhileSubscribed(5000), //espera 5 segundos antes de detener el flow
             initialValue = emptyList() //valor inicial del flow, previo a la primera emision
         )
 
     //llama para preguntar por permiso de gps
     fun hasLocationPermission(): Boolean = locationProvider.hasLocationPermission()
-    //función para registrar temperatura, la temperatura entra como parametro
+    //función para registrar temperatura, la temperatura entra como parámetro
     fun registrarLectura(temperatura: Double, onResult: (exito: Boolean) -> Unit) {
         viewModelScope.launch { //instancia corutina
             val location = locationProvider.getCurrentLocation() //guarda gps
             if (location != null) { //pregunta si registro gps de forma correcta
-                lecturaDao.insertar( //inserta el objeto/lectura en la Room
+                lecturaDao.insertar( //inserta el objeto/lectura en la Room, IMPORTANTE SE IGNORA EL RETORNO
                     LecturaEntity( //definición del objeto
-                        temperatura = temperatura, //parametro tal cual, validado desde antes
+                        temperatura = temperatura, //parámetro tal cual, validado desde antes
                         latitud = location.latitude, //define latitud
-                        longitud = location.longitude //defien longitud
+                        longitud = location.longitude //define longitud
                     )
                 )
                 onResult(true) //emite una señal de que se guardó correctamente

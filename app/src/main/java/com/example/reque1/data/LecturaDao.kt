@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface LecturaDao { //room genera el sql
 
     @Insert //genera automáticamente el insert según atributo
-    suspend fun insertar(lectura: LecturaEntity) //suspend para que siempre se haga corutina
+    suspend fun insertar(lectura: LecturaEntity): Long //suspend para que siempre se haga corutina
 
     @Query("SELECT * FROM lecturas_temperatura ORDER BY fechaHora DESC") //trae todas las columnas de todas las filas por orden de fecha
     fun obtenerTodas(): Flow<List<LecturaEntity>> //por la room, se dispara automáticamente al notar cambios

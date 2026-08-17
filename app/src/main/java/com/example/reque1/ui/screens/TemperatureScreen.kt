@@ -21,6 +21,7 @@ import com.example.reque1.ui.components.ConnectionStatus
 import com.example.reque1.ui.components.RegisterLecturaButton
 import com.example.reque1.ui.components.TemperatureInputField
 import com.example.reque1.ui.viewmodel.LecturaViewModel
+import com.example.reque1.ui.components.LecturaList
 
 @Composable
 fun TemperatureScreen(
@@ -36,6 +37,9 @@ fun TemperatureScreen(
     //el viewModel expone un StateFlow
     //collectAsState() lo convierte en State de Compose automáticamente
     val isConnected by viewModel.isConnected.collectAsState()
+
+    //
+    val lecturas by viewModel.lecturas.collectAsState()
 
     //permisos
     //se consulta al viewModel
@@ -85,6 +89,11 @@ fun TemperatureScreen(
             )
         } //cierre de cosas que ocupan wifi
         //más cosas sin wifi
+        LecturaList( //componente de registro de lecturas
+            lecturas = lecturas,
+            modifier = Modifier.weight(1f)
+        )
+
 
     }
 }
