@@ -22,6 +22,7 @@ import com.example.reque1.ui.components.RegisterLecturaButton
 import com.example.reque1.ui.components.TemperatureInputField
 import com.example.reque1.ui.viewmodel.LecturaViewModel
 import com.example.reque1.ui.components.LecturaList
+import com.example.reque1.ui.components.SpotifySection
 
 @Composable
 fun TemperatureScreen(
@@ -87,7 +88,9 @@ fun TemperatureScreen(
                     }
                 }
             )
-        } //cierre de cosas que ocupan wifi
+        }
+        SpotifySection()
+        //cierre de cosas que ocupan wifi
         //más cosas sin wifi
         LecturaList( //componente de registro de lecturas
             lecturas = lecturas,
