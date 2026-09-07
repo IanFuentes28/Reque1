@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.reque1.ui.navigation.AppNavigation
 import com.example.reque1.ui.theme.Reque1Theme
 import com.example.reque1.ui.screens.TemperatureScreen
 
@@ -17,7 +18,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Reque1Theme {
-                    TemperatureScreen(modifier = Modifier)
+                AppNavigation()
                 }
             }
         }

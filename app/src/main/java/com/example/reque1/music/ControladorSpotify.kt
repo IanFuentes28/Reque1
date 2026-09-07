@@ -1,4 +1,4 @@
-package com.example.reque1.ui.components
+package com.example.reque1.music
 
 import android.content.Context
 import android.content.Intent
@@ -19,7 +19,10 @@ class ControladorSpotify(private val context: Context) {
         }
 
         // Abre la lista de reproducción directamente en la app de Spotify (o en el navegador)
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://open.spotify.com/playlist/$playlistId")).apply {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://open.spotify.com/playlist/$playlistId")
+        ).apply {
             putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://" + context.packageName))
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }

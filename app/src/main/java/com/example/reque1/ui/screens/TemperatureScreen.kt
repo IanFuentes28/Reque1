@@ -89,7 +89,6 @@ fun TemperatureScreen(
                 }
             )
         }
-        SpotifySection()
         //cierre de cosas que ocupan wifi
         //más cosas sin wifi
         LecturaList( //componente de registro de lecturas
